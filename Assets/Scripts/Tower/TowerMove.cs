@@ -12,14 +12,15 @@ namespace Tower
 {
     public class TowerMove : MonoBehaviour
     {
+        [SerializeField] private TowerEffects _towerEffects;
+        [SerializeField] private Transform _bodyTransform;
         [SerializeField] private Gates _gates;
-        [SerializeField] private CameraAnimations _cameraAnimations;
+        [SerializeField] private TowerCameraAnimations _cameraAnimations;
 
         [SerializeField] private float moveSpeed = 15;
         [SerializeField] private float hasteMoveSpeed = 60;
         [SerializeField] private float bounceBackSpeed = 3;
         [SerializeField] private float acceleration = 30;
-        // [SerializeField] private float hasteaAcceleration = 40;
         [SerializeField] private float bounceAcceleration = 3;
         [SerializeField] private float bounceAccelerationDelay = 1.5f;
         [SerializeField] private float manualRotationSpeed = 3;
@@ -37,6 +38,11 @@ namespace Tower
         private float _currentAcceleration;
         private bool _slowedDown;
 
+        public void Init(Dictionary<Vector3, int[,]> towerProjections)
+        {
+            _towerProjections = towerProjections;
+        }
+
         private void Start()
         {
             _inputService = AllServices.Instance.Get<IInputService>();
@@ -51,22 +57,16 @@ namespace Tower
             {
                 if (!_slowedDown)
                 {
-                    Vector3 forward = transform.forward;
-                    if (_towerProjections.TryGetValue(transform.forward, out int[,] proj))
+                    if (_towerProjections.TryGetValue(_bodyTransform.forward, out int[,] proj) && EqualityCheck(proj, _gates.NextGatePattern))
                     {
-                        if (EqualityCheck(proj, _gates.NextGatePattern))
-                        {
-                            _targetSpeed = hasteMoveSpeed;
-                            _cameraAnimations.SetHaste(true);
-                        } else
-                        {
-                            _targetSpeed = moveSpeed;
-                            _cameraAnimations.SetHaste(false);
-                        }
+                        _targetSpeed = hasteMoveSpeed;
+                        _cameraAnimations.SetHaste(true);
+                        _towerEffects.SetEnabledSpeedFx(true);
                     } else
                     {
                         _targetSpeed = moveSpeed;
                         _cameraAnimations.SetHaste(false);
+                        _towerEffects.SetEnabledSpeedFx(false);
                     }
                 }
 
@@ -108,16 +108,16 @@ namespace Tower
             if (_inputService.GetMouseButton(0))
             {
                 Vector3 mousePosition = _inputService.MousePosition;
-                transform.Rotate(Vector3.up, (mousePosition - _prevMousePos).x * manualRotationSpeed, Space.World);
+                _bodyTransform.Rotate(Vector3.up, (mousePosition - _prevMousePos).x * manualRotationSpeed, Space.World);
                 _prevMousePos = mousePosition;
             } else
             {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, autoRotateSpeed * Time.deltaTime);
+                _bodyTransform.rotation = Quaternion.RotateTowards(_bodyTransform.rotation, _targetRotation, autoRotateSpeed * Time.deltaTime);
             }
 
             if (_inputService.GetMouseButtonUp(0))
             {
-                Vector3 currentDir = transform.forward;
+                Vector3 currentDir = _bodyTransform.forward;
                 Vector3 max = _directions[0];
                 float maxDot = Vector3.Dot(currentDir, max);
                 for (int i = 1; i < _directions.Length; i++)
@@ -145,14 +145,10 @@ namespace Tower
             _currentAcceleration = bounceAcceleration;
             _slowedDown = true;
             _cameraAnimations.SetHaste(false);
+            _towerEffects.SetEnabledSpeedFx(false);
             yield return new WaitForSeconds(bounceAccelerationDelay);
             _currentAcceleration = acceleration;
             _slowedDown = false;
-        }
-
-        public void Init(Dictionary<Vector3, int[,]> towerProjections)
-        {
-            _towerProjections = towerProjections;
         }
     }
 }

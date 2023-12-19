@@ -4,7 +4,7 @@ namespace Tower
 {
     public class TowerBody : MonoBehaviour
     {
-        public TowerBlock blockPf;
+        [SerializeField] private TowerBlock blockPf;
 
         public void Init(int[][,] matrix)
         {

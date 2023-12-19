@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CameraAnimations : MonoBehaviour
+public class TowerCameraAnimations : MonoBehaviour
 {
     [SerializeField] private float normalFov;
     [SerializeField] private float accelFov;
