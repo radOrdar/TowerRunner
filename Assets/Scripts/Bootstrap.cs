@@ -16,7 +16,6 @@ public class Bootstrap : MonoBehaviour
    private void RegisterServices()
    {
       AllServices.Instance.Register<ITowerGeneratorService>(new TowerGeneratorService());
-      AllServices.Instance.Register<IGateGeneratorService>(new GateGeneratorService());
       AllServices.Instance.Register<IInputService>(new OldInputService());
    }
 

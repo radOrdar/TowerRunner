@@ -16,13 +16,11 @@ public class LevelInitializer : MonoBehaviour
     [SerializeField] private TowerBody towerBody;
     [SerializeField] private TowerMove towerMove;
     [SerializeField] private TowerCollision towerCollision;
-
-    private IGateGeneratorService _gateGeneratorService;
+    
     private ITowerGeneratorService _towerGeneratorService;
 
     private void Awake()
     {
-        _gateGeneratorService = AllServices.Instance.Get<IGateGeneratorService>();
         _towerGeneratorService = AllServices.Instance.Get<ITowerGeneratorService>();
         
         TowerPattern towerPattern = _towerGeneratorService.GeneratePattern(levelData.towerLevels, levelData.numLedge);
