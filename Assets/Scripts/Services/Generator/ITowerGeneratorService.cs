@@ -1,4 +1,4 @@
-﻿using Tower;
+﻿using Tower.Data;
 
 namespace Services.Generator
 {

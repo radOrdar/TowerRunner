@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace Obstacle
 {
+    [RequireComponent(typeof(Rigidbody))]
     public class ObstacleBlock : MonoBehaviour
     {
         private Rigidbody _rb;

@@ -767,7 +767,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalFov: 100
   accelFov: 130
-  fovSpeed: 0.8
+  fovSpeed: 1
 --- !u!1 &355778444
 GameObject:
   m_ObjectHideFlags: 0
@@ -1110,6 +1110,7 @@ GameObject:
   - component: {fileID: 461060804}
   - component: {fileID: 461060803}
   - component: {fileID: 461060808}
+  - component: {fileID: 461060809}
   m_Layer: 7
   m_Name: Tower
   m_TagString: Untagged
@@ -1129,10 +1130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2e86f94d1fb77e49a30f3934c20ab54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _towerEffects: {fileID: 461060808}
-  _bodyTransform: {fileID: 1599391049}
-  _gates: {fileID: 1742257077}
-  _cameraAnimations: {fileID: 330585548}
+  bodyTransform: {fileID: 1599391049}
   moveSpeed: 15
   hasteMoveSpeed: 45
   bounceBackSpeed: 3
@@ -1171,6 +1169,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerSpeedFx: {fileID: 2074925590}
+--- !u!114 &461060809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 461060802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b5c2fc7c424c6fb37da8a0b25821ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tickPeriod: 0.2
+  gainFx: {fileID: 790569100355211167, guid: 8f678b15c8e24b8409e91c1c4c7a10e2, type: 3}
 --- !u!1 &512428661
 GameObject:
   m_ObjectHideFlags: 0
@@ -2018,10 +2030,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelData: {fileID: 11400000, guid: e4e1b23c548290749876e8fe4f285f9d, type: 2}
-  gates: {fileID: 1742257077}
-  towerBody: {fileID: 1599391051}
-  towerMove: {fileID: 461060803}
-  towerCollision: {fileID: 1599391050}
 --- !u!4 &1352450191
 Transform:
   m_ObjectHideFlags: 0
@@ -2404,7 +2412,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c60de16ce60d4aa4aeec7fd1818c7a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerMove: {fileID: 461060803}
 --- !u!114 &1599391051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2572,7 +2579,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   obstaclePf: {fileID: 6010459574702017839, guid: b367644fc68959843a474e53532fce03,
     type: 3}
-  _frameObstaclePf: {fileID: 5475004496177685405, guid: f63281d38260a744c9f7a38438297aff,
+  frameObstaclePf: {fileID: 5475004496177685405, guid: f63281d38260a744c9f7a38438297aff,
     type: 3}
 --- !u!4 &1742257078
 Transform:
