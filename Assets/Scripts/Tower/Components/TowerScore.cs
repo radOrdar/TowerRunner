@@ -10,12 +10,13 @@ namespace Tower.Components
     {
         [SerializeField] private float tickPeriod = 0.2f;
         [SerializeField] private ScoreGainFx gainFx;
+        [SerializeField] private StreakFx streakFx;
 
         private int _streak;
         private float _lastStreakChangeTime;
         private float _lastResetStreakTime;
 
-        private IObjectPool<ScoreGainFx> _pool;
+        private IObjectPool<ScoreGainFx> _poolScoreGainFx;
 
         private int Streak
         {
@@ -32,11 +33,11 @@ namespace Tower.Components
 
         private void Start()
         {
-            _pool = new ObjectPool<ScoreGainFx>(
+            _poolScoreGainFx = new ObjectPool<ScoreGainFx>(
                 createFunc: () =>
                 {
                     var s = Instantiate(gainFx, transform);
-                    s.Origin = _pool;
+                    s.Origin = _poolScoreGainFx;
                     return s;
                 },
                 actionOnGet: s =>
@@ -78,8 +79,7 @@ namespace Tower.Components
                 if (_gaining && _streak > 0)
                 {
                     _score += Streak;
-                    print($"Score {_score}");
-                    _pool.Get();
+                    _poolScoreGainFx.Get();
                 }
 
                 yield return WaitForSecondsPool.Get(tickPeriod);
@@ -88,7 +88,10 @@ namespace Tower.Components
 
         private void StreakEffect()
         {
-            Debug.Log($"------Streak {_streak}");
+            if (_streak > 0)
+            {
+                streakFx.PlayFx(_streak);
+            }
         }
     }
 }

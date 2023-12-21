@@ -1,3 +1,4 @@
+using System;
 using Services;
 using Services.Generator;
 using Services.Input;
@@ -24,6 +25,11 @@ namespace Infrastructure
       private void LoadGame()
       {
          SceneManager.LoadScene("Game");
+      }
+
+      private void OnDestroy()
+      {
+         AllServices.Instance.Dispose();
       }
    }
 }

@@ -15,5 +15,10 @@ namespace Services
 
         public void Register<TService>(TService service) where TService : IService =>
             _container.Add(typeof(TService), service);
+
+        public void Dispose()
+        {
+            instance = null;
+        }
     }
 }
