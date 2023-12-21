@@ -29,7 +29,7 @@ public class ScoreGainFx : MonoBehaviour
             
         while (time < duration)
         {
-            transform.localPosition = Vector3.Lerp(endPoints[0], endPoints[1], EasingFunctions.EaseOutCirc(time / duration));
+            transform.localPosition = Vector3.Lerp(endPoints[0], endPoints[1], EasingFunctions.EaseOutQuint(time / duration));
                 
             yield return null;
             time += Time.deltaTime;

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
 using Utils;
@@ -11,6 +12,7 @@ namespace Tower.Components
         [SerializeField] private float tickPeriod = 0.2f;
         [SerializeField] private ScoreGainFx gainFx;
         [SerializeField] private StreakFx streakFx;
+        [SerializeField] private TextMeshProUGUI scoreText;
 
         private int _streak;
         private float _lastStreakChangeTime;
@@ -69,6 +71,9 @@ namespace Tower.Components
             if (Time.time - _lastStreakChangeTime < 0.5f)
                 return;
             Streak++;
+            _poolScoreGainFx.Get().SetValue(_streak * 10);
+            _score += _streak * 10;
+            scoreText.SetText(_score.ToString());
             _lastStreakChangeTime = Time.time;
         }
 
@@ -79,6 +84,7 @@ namespace Tower.Components
                 if (_gaining && _streak > 0)
                 {
                     _score += Streak;
+                    scoreText.SetText(_score.ToString());
                     _poolScoreGainFx.Get();
                 }
 
