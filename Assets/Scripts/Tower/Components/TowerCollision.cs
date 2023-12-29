@@ -8,7 +8,7 @@ namespace Tower.Components
     public class TowerCollision : MonoBehaviour
     {
         public event Action OnGatePassed;
-        public event Action OnObstacleCollided;
+        public event Action OnGateCollided;
         
         private List<Collider> _colliders = new();
 
@@ -37,7 +37,7 @@ namespace Tower.Components
                     Physics.IgnoreCollision(col, other.collider);
                 }
 
-                OnObstacleCollided?.Invoke();
+                OnGateCollided?.Invoke();
             }
         }
 

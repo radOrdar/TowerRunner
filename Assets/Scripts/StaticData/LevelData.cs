@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace StaticData
 {
-    [CreateAssetMenu(fileName = "LevelData", menuName = "StaticData", order = 0)]
+    [CreateAssetMenu(fileName = "LevelData", menuName = "StaticData/LevelData")]
     public class LevelData : ScriptableObject
     {
         public int towerLevels = 8;

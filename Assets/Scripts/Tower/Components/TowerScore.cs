@@ -50,7 +50,7 @@ namespace Tower.Components
             );
 
             GetComponentInChildren<TowerCollision>().OnGatePassed += StreakIncrease;
-            GetComponentInChildren<TowerCollision>().OnObstacleCollided += ResetStreak;
+            GetComponentInChildren<TowerCollision>().OnGateCollided += ResetStreak;
             GetComponent<TowerMove>().OnHasteSwitch += enable => _gaining = enable;
             Streak = 1;
             StartCoroutine(ScoreTick());

@@ -46,7 +46,7 @@ namespace Tower.Components
         {
             _inputService = AllServices.Instance.Get<IInputService>();
             allGates = FindAnyObjectByType<AllGates>();
-            GetComponentInChildren<TowerCollision>().OnObstacleCollided += BounceBack;
+            GetComponentInChildren<TowerCollision>().OnGateCollided += BounceBack;
             
             _targetSpeed = moveSpeed;
             _currentAcceleration = acceleration;
