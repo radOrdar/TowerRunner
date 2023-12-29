@@ -20,10 +20,10 @@ public class ScoreGainFx : MonoBehaviour
     private void OnEnable()
     {
         transform.localPosition = Vector3.zero;
-        StartCoroutine(Animate());
+        StartCoroutine(AnimateAndRelease());
     }
 
-    private IEnumerator Animate()
+    private IEnumerator AnimateAndRelease()
     {
         float time = 0;
             
@@ -37,8 +37,4 @@ public class ScoreGainFx : MonoBehaviour
 
         Origin.Release(this);
     }
-
-        
-      
-
 }

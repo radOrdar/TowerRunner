@@ -7,7 +7,7 @@ namespace Tower.Components
 {
     public class TowerCollision : MonoBehaviour
     {
-        public event Action OnGatesTriggered;
+        public event Action OnGatePassed;
         public event Action OnObstacleCollided;
         
         private List<Collider> _colliders = new();
@@ -21,9 +21,9 @@ namespace Tower.Components
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out Gates _))
+            if (other.TryGetComponent(out GatePass _))
             {
-                OnGatesTriggered?.Invoke();
+                OnGatePassed?.Invoke();
             }
         }
 

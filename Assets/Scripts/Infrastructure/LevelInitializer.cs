@@ -15,7 +15,7 @@ namespace Infrastructure
     public class LevelInitializer : MonoBehaviour
     {
         [SerializeField] private LevelData levelData;
-        private Gates _gates;
+        private AllGates allGates;
         private TowerBody _towerBody;
         private TowerMove _towerMove;
         private TowerCollision _towerCollision;
@@ -24,7 +24,7 @@ namespace Infrastructure
 
         private void Awake()
         {
-            _gates = FindAnyObjectByType<Gates>();
+            allGates = FindAnyObjectByType<AllGates>();
             _towerBody = FindAnyObjectByType<TowerBody>();
             _towerMove = FindAnyObjectByType<TowerMove>();
             _towerCollision = FindAnyObjectByType<TowerCollision>();
@@ -37,7 +37,7 @@ namespace Infrastructure
         
             List<int[,]> gatePatterns = Enumerable.Range(0, levelData.numOfGates).Select(_ => towerPattern.towerProjections[RandomDirection()]).ToList();
 
-            _gates.Init(gatePatterns, levelData.distanceBtwGates);
+            allGates.Init(gatePatterns, levelData.distanceBtwGates);
 
             Vector3 RandomDirection()
             {

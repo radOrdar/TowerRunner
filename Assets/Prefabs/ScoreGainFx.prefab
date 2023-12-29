@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1440ed25d2024308b330b8bd1c7efece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 1.5
+  duration: 2
   endPoints:
   - {x: 0, y: 8, z: 0}
   - {x: 0, y: 22, z: 0}
@@ -176,8 +176,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4288364746
-  m_fontColor: {r: 0.7924527, g: 0.25044483, b: 0.60968524, a: 1}
+    rgba: 4293808144
+  m_fontColor: {r: 0.06167661, g: 0.31329256, b: 0.9339621, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

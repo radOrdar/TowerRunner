@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: LevelData
   m_EditorClassIdentifier: 
   towerLevels: 8
-  numLedge: 3
-  numOfGates: 30
+  numLedge: 4
+  numOfGates: 50
   distanceBtwGates: 100

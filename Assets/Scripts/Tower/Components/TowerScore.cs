@@ -45,12 +45,11 @@ namespace Tower.Components
                 actionOnGet: s =>
                 {
                     s.gameObject.SetActive(true);
-                    s.SetValue(_streak);
                 },
                 actionOnRelease: g => g.gameObject.SetActive(false)
             );
 
-            GetComponentInChildren<TowerCollision>().OnGatesTriggered += StreakIncrease;
+            GetComponentInChildren<TowerCollision>().OnGatePassed += StreakIncrease;
             GetComponentInChildren<TowerCollision>().OnObstacleCollided += ResetStreak;
             GetComponent<TowerMove>().OnHasteSwitch += enable => _gaining = enable;
             Streak = 1;
@@ -85,7 +84,7 @@ namespace Tower.Components
                 {
                     _score += Streak;
                     scoreText.SetText(_score.ToString());
-                    _poolScoreGainFx.Get();
+                    _poolScoreGainFx.Get().SetValue(_streak);
                 }
 
                 yield return WaitForSecondsPool.Get(tickPeriod);

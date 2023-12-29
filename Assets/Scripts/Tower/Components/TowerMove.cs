@@ -25,7 +25,7 @@ namespace Tower.Components
         private Vector3[] _directions = { Vector3.forward, Vector3.left, Vector3.right, Vector3.back, };
         private Dictionary<Vector3, int[,]> _towerProjections;
 
-        private Gates _gates;
+        private AllGates allGates;
         private IInputService _inputService;
 
         private Vector3 _prevMousePos;
@@ -45,15 +45,14 @@ namespace Tower.Components
         private void Start()
         {
             _inputService = AllServices.Instance.Get<IInputService>();
-            _gates = FindAnyObjectByType<Gates>();
+            allGates = FindAnyObjectByType<AllGates>();
             GetComponentInChildren<TowerCollision>().OnObstacleCollided += BounceBack;
             
             _targetSpeed = moveSpeed;
             _currentAcceleration = acceleration;
             StartCoroutine(CheckGateForm());
         }
-
-        // Update is called once per frame
+        
         void Update()
         {
             _currentSpeed = Mathf.MoveTowards(_currentSpeed, _targetSpeed, _currentAcceleration * Time.deltaTime);
@@ -99,7 +98,7 @@ namespace Tower.Components
             {
                 if (!_slowedDown)
                 {
-                    if (_towerProjections.TryGetValue(bodyTransform.forward, out int[,] proj) && EqualityCheck(proj, _gates.NextGatePattern))
+                    if (_towerProjections.TryGetValue(bodyTransform.forward, out int[,] proj) && EqualityCheck(proj, allGates.NextGatePattern))
                     {
                         _targetSpeed = hasteMoveSpeed;
                         OnHasteSwitch?.Invoke(true);
