@@ -12,7 +12,7 @@ namespace Tower.Components
         
         private List<Collider> _colliders = new();
 
-        private float _lastStreakChangeTime;
+        private float _lastGatePassTime;
 
         public void Init(int[][,] matrix)
         {
@@ -23,7 +23,11 @@ namespace Tower.Components
         {
             if (other.TryGetComponent(out GatePass _))
             {
-                OnGatePassed?.Invoke();
+                if (Time.time - _lastGatePassTime > 0.5f)
+                {
+                    _lastGatePassTime = Time.time;
+                    OnGatePassed?.Invoke();
+                }
             }
         }
 
@@ -97,40 +101,35 @@ namespace Tower.Components
             // meshCollider.isTrigger = true;
         }
 
-        private Mesh CreateCubeMesh()
-        {
-            Mesh mesh = new Mesh();
-            Vector3[] vertices =
+        private Mesh CreateCubeMesh() =>
+            new()
             {
-                new(0.5f, 0, -0.5f),
-                new(-0.5f, 0, -0.5f),
-                new(-0.5f, 0, 0.5f),
-                new(0.5f, 0, 0.5f),
-                new(0.5f, 1, -0.5f),
-                new(-0.5f, 1, -0.5f),
-                new(-0.5f, 1, 0.5f),
-                new(0.5f, 1, 0.5f),
+                vertices = new Vector3[]
+                {
+                    new(0.5f, 0, -0.5f),
+                    new(-0.5f, 0, -0.5f),
+                    new(-0.5f, 0, 0.5f),
+                    new(0.5f, 0, 0.5f),
+                    new(0.5f, 1, -0.5f),
+                    new(-0.5f, 1, -0.5f),
+                    new(-0.5f, 1, 0.5f),
+                    new(0.5f, 1, 0.5f),
+                },
+                triangles = new []
+                {
+                    0, 2, 1,
+                    0, 3, 2,
+                    0, 1, 5,
+                    0, 5, 4,
+                    2, 5, 1,
+                    2, 6, 5,
+                    3, 6, 2,
+                    3, 7, 6,
+                    0, 4, 7,
+                    0, 7, 3,
+                    4, 5, 6,
+                    4, 6, 7
+                }
             };
-            mesh.vertices = vertices;
-
-            int[] triangles =
-            {
-                0, 2, 1,
-                0, 3, 2,
-                0, 1, 5,
-                0, 5, 4,
-                2, 5, 1,
-                2, 6, 5,
-                3, 6, 2,
-                3, 7, 6,
-                0, 4, 7,
-                0, 7, 3,
-                4, 5, 6,
-                4, 6, 7
-            };
-            mesh.triangles = triangles;
-
-            return mesh;
-        }
     }
 }

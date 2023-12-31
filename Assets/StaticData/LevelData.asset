@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 838e3da704bd440583c7cbe2dbeb7169, type: 3}
   m_Name: LevelData
   m_EditorClassIdentifier: 
-  towerLevels: 8
+  towerLevels: 10
   numLedge: 4
   numOfGates: 50
   distanceBtwGates: 100

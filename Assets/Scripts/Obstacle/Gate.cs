@@ -16,7 +16,7 @@ namespace Obstacle
         {
             BoxCollider boxCollider = gameObject.AddComponent<BoxCollider>();
             boxCollider.isTrigger = true;
-            boxCollider.size = new Vector3(5, 1, 1);
+            boxCollider.size = new Vector3(5, 50, 1);
             boxCollider.center = Vector3.up * 0.5f;
             gameObject.layer = LayerMask.NameToLayer("Gates");
 

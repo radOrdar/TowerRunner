@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using UnityEngine;
 using Utils;
@@ -10,6 +9,7 @@ public class StreakFx : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
 
     [SerializeField] private float duration;
+    [SerializeField] private EasingFunctions.EaseType easeType;
 
     private void Start()
     {
@@ -30,7 +30,7 @@ public class StreakFx : MonoBehaviour
         while (time < duration / 2)
         {
             float normalizedTime = 2 * time / duration;
-            canvasGroup.alpha = EasingFunctions.EaseOutQuint(normalizedTime);
+            canvasGroup.alpha = EasingFunctions.Ease(easeType, normalizedTime);
             yield return null;
             time += Time.deltaTime;
         }
@@ -39,7 +39,7 @@ public class StreakFx : MonoBehaviour
         while (time < duration)
         {
             float normalizedTime = 2 * time / duration;
-            canvasGroup.alpha = EasingFunctions.EaseOutQuint(1 - normalizedTime);
+            canvasGroup.alpha = EasingFunctions.Ease(easeType,1 - normalizedTime);
             yield return null;
             time += Time.deltaTime;
         }

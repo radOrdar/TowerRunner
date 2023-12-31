@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8207717093174700067}
   - component: {fileID: 8699575411145777537}
   - component: {fileID: 3630907858174746730}
+  - component: {fileID: 6310944287947594894}
   - component: {fileID: 790569100355211167}
   m_Layer: 5
   m_Name: ScoreGainFx
@@ -85,6 +86,18 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 1
+--- !u!225 &6310944287947594894
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908157234848011043}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!114 &790569100355211167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,11 +110,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1440ed25d2024308b330b8bd1c7efece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 2
+  duration: 0.5
   endPoints:
-  - {x: 0, y: 8, z: 0}
-  - {x: 0, y: 22, z: 0}
-  text: {fileID: 3635204794310672692}
+  - {x: 0, y: 10, z: 0}
+  - {x: 2, y: 18, z: 0}
+  moveEaseType: 6
+  alphaEaseType: 2
 --- !u!1 &5999994764902171649
 GameObject:
   m_ObjectHideFlags: 0

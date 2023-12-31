@@ -73,7 +73,7 @@ namespace Obstacle
             ParticleSystem sideFxLeft = Instantiate(frameFxSide, obstacleParent);
             sideFxLeft.transform.localPosition = new Vector3(-1, height / 2f - 0.5f, 0);
             var sideFxLeftEmission = sideFxLeft.emission;
-            sideFxLeftEmission.SetBurst(0, new ParticleSystem.Burst(0, height));
+            sideFxLeftEmission.SetBurst(0, new ParticleSystem.Burst(0, (short)height, (short)height, int.MaxValue, 1));
             var sideFxShapeLeft = sideFxLeft.shape;
             sideFxShapeLeft.radius = height / 2f;
             
@@ -84,7 +84,7 @@ namespace Obstacle
             ParticleSystem sideFxRight = Instantiate(frameFxSide, obstacleParent);
             sideFxRight.transform.localPosition = new Vector3(5, height / 2f - 0.5f, 0);
             var sideFxRightEmission = sideFxRight.emission;
-            sideFxRightEmission.SetBurst(0, new ParticleSystem.Burst(0, height));
+            sideFxRightEmission.SetBurst(0, new ParticleSystem.Burst(0, (short)height, (short)height, int.MaxValue, 1));
             var sideFxShapeRight = sideFxRight.shape;
             sideFxShapeRight.radius = height / 2f;
             

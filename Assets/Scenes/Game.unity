@@ -869,7 +869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   normalFov: 100
-  accelFov: 120
+  accelFov: 127
   fovSpeed: 2
 --- !u!1 &337414094
 GameObject:
@@ -1159,7 +1159,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   streakText: {fileID: 342828788}
   canvasGroup: {fileID: 342828791}
-  duration: 3
+  duration: 1.5
+  easeType: 3
 --- !u!225 &342828791
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -4180,9 +4181,9 @@ ParticleSystem:
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
-    m_Position: {x: 0, y: 4, z: 0}
+    m_Position: {x: 0, y: 5, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 4, y: 8, z: 1}
+    m_Scale: {x: 4, y: 10, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
