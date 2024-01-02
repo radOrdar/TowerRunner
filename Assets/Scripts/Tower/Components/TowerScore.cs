@@ -30,7 +30,7 @@ namespace Tower.Components
             }
         }
 
-        private bool _gaining = true;
+        private bool _gaining;
         private int _score;
 
         private void Start()
@@ -49,8 +49,16 @@ namespace Tower.Components
                 actionOnRelease: g => g.gameObject.SetActive(false)
             );
 
-            GetComponentInChildren<TowerCollision>().OnGatePassed += StreakIncrease;
-            GetComponentInChildren<TowerCollision>().OnGateCollided += ResetStreak;
+            var towerCollision = GetComponentInChildren<TowerCollision>();
+            towerCollision.OnGatePassed += StreakIncrease;
+            towerCollision.OnGateCollided += ResetStreak;
+            towerCollision.OnFinishPassed += () =>
+            {
+                _gaining = false;
+                _score += 300;
+                scoreText.SetText(_score.ToString());
+                _poolScoreGainFx.Get().SetValue(300);
+            };
             GetComponent<TowerMove>().OnHasteSwitch += enable => _gaining = enable;
             Streak = 1;
             StartCoroutine(ScoreTick());

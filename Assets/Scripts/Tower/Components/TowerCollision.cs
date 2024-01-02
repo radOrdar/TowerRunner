@@ -9,10 +9,12 @@ namespace Tower.Components
     {
         public event Action OnGatePassed;
         public event Action OnGateCollided;
-        
+        public event Action OnFinishPassed;
+
         private List<Collider> _colliders = new();
 
         private float _lastGatePassTime;
+        private bool _isFinished;
 
         public void Init(int[][,] matrix)
         {
@@ -27,6 +29,15 @@ namespace Tower.Components
                 {
                     _lastGatePassTime = Time.time;
                     OnGatePassed?.Invoke();
+                }
+            }
+
+            if (other.TryGetComponent(out FinishLine _))
+            {
+                if (!_isFinished)
+                {
+                    _isFinished = true;
+                    OnFinishPassed?.Invoke();
                 }
             }
         }
@@ -115,7 +126,7 @@ namespace Tower.Components
                     new(-0.5f, 1, 0.5f),
                     new(0.5f, 1, 0.5f),
                 },
-                triangles = new []
+                triangles = new[]
                 {
                     0, 2, 1,
                     0, 3, 2,

@@ -18,6 +18,7 @@ namespace Tower.Components
         [SerializeField] private float bounceBackSpeed = 3;
         [SerializeField] private float acceleration = 30;
         [SerializeField] private float bounceAcceleration = 3;
+        [SerializeField] private float finishAcceleration = 150;
         [SerializeField] private float bounceAccelerationDelay = 1.5f;
         [SerializeField] private float manualRotationSpeed = 3;
         [SerializeField] private float autoRotateSpeed = 90;
@@ -34,6 +35,7 @@ namespace Tower.Components
         private float _currentSpeed;
         private float _currentAcceleration;
         private bool _slowedDown;
+        private bool _stopped;
 
         public event Action<bool> OnHasteSwitch;
 
@@ -41,23 +43,27 @@ namespace Tower.Components
         {
             _towerProjections = towerProjections;
         }
-
+        
         private void Start()
         {
             _inputService = AllServices.Instance.Get<IInputService>();
             allGates = FindAnyObjectByType<AllGates>();
             GetComponentInChildren<TowerCollision>().OnGateCollided += BounceBack;
+            GetComponentInChildren<TowerCollision>().OnFinishPassed += Stop;
             
             _targetSpeed = moveSpeed;
             _currentAcceleration = acceleration;
             StartCoroutine(CheckGateForm());
         }
-        
+
         void Update()
         {
             _currentSpeed = Mathf.MoveTowards(_currentSpeed, _targetSpeed, _currentAcceleration * Time.deltaTime);
             transform.position += Vector3.forward * (_currentSpeed * Time.deltaTime);
 
+            if(_stopped)
+                return;
+            
             if (_inputService.GetMouseButtonDown(0))
             {
                 _prevMousePos = _inputService.MousePosition;
@@ -91,14 +97,19 @@ namespace Tower.Components
                 _targetRotation = Quaternion.LookRotation(max, Vector3.up);
             }
         }
-        
+
         private IEnumerator CheckGateForm()
         {
             while (true)
             {
+                if(_stopped)
+                    break;
                 if (!_slowedDown)
                 {
-                    if (_towerProjections.TryGetValue(bodyTransform.forward, out int[,] proj) && EqualityCheck(proj, allGates.NextGatePattern))
+                    
+                    if (_towerProjections.TryGetValue(bodyTransform.forward, out int[,] proj) &&
+                        allGates.TryGetNextGatePattern(out int[,] gatePattern) &&
+                        EqualityCheck(proj, gatePattern))
                     {
                         _targetSpeed = hasteMoveSpeed;
                         OnHasteSwitch?.Invoke(true);
@@ -113,6 +124,7 @@ namespace Tower.Components
             }
         }
 
+        //TODO replace with some sorts of hashcodes
         private bool EqualityCheck(int[,] m1, int[,] m2)
         {
             if (m1.GetLength(0) != m2.GetLength(0) || m1.GetLength(1) != m2.GetLength(1))
@@ -147,6 +159,13 @@ namespace Tower.Components
             yield return WaitForSecondsPool.Get(bounceAccelerationDelay);
             _currentAcceleration = acceleration;
             _slowedDown = false;
+        }
+
+        private void Stop()
+        {
+            _stopped = true;
+            _targetSpeed = 0;
+            _currentAcceleration = finishAcceleration;
         }
     }
 }

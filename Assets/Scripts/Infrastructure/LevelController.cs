@@ -16,6 +16,7 @@ namespace Infrastructure
     public class LevelController : MonoBehaviour
     {
         [SerializeField] private LevelData levelData;
+        [SerializeField] private FinishLine finishLinePf;
 
         private IAudioService _audioService;
         private void Awake()
@@ -30,10 +31,10 @@ namespace Infrastructure
             towerCollision.Init(towerPattern.matrix);
             towerCollision.OnGateCollided += () => _audioService.PlayBump();
             towerCollision.OnGatePassed += () => _audioService.PlayDing();
-
             
             List<int[,]> gatePatterns = Enumerable.Range(0, levelData.numOfGates).Select(_ => towerPattern.towerProjections[RandomDirection()]).ToList();
 
+            Instantiate(finishLinePf, new Vector3(0, 0.1f, levelData.numOfGates * levelData.distanceBtwGates + 40), Quaternion.identity);
             FindAnyObjectByType<AllGates>().Init(gatePatterns, levelData.distanceBtwGates);
             
             Vector3 RandomDirection()
@@ -48,6 +49,5 @@ namespace Infrastructure
                 };
             }
         }
-    
     }
 }
