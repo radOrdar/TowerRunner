@@ -31,5 +31,12 @@ namespace Services.Audio
         {
             _audioSource.PlayOneShot(_soundsData.ding);
         }
+
+        public void PlayFinish()
+        {
+            _audioSource.Stop();
+            _audioSource.clip = _soundsData.finishMusic;
+            _audioSource.Play();
+        }
     }
 }

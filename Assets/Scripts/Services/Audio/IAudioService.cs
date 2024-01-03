@@ -8,5 +8,6 @@ namespace Services.Audio
         void PlayMusic();
         void PlayBump();
         void PlayDing();
+        void PlayFinish();
     }
 }

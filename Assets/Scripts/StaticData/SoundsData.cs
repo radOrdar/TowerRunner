@@ -6,6 +6,7 @@ namespace StaticData
     public class SoundsData : ScriptableObject
     {
         public AudioClip music;
+        public AudioClip finishMusic;
         public AudioClip bump;
         public AudioClip ding;
     }

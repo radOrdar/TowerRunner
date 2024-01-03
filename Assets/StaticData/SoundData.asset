@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b6652b6bb494f098bc3161a7a9bc250, type: 3}
   m_Name: SoundData
   m_EditorClassIdentifier: 
-  music: {fileID: 8300000, guid: 449c1948471d08c478895f20ff516f2d, type: 3}
+  music: {fileID: 8300000, guid: 2c5c8d074db022c418540e074c2f2278, type: 3}
+  finishMusic: {fileID: 8300000, guid: 449c1948471d08c478895f20ff516f2d, type: 3}
   bump: {fileID: 8300000, guid: 87a806ce117c07043a84e8fa815825f6, type: 3}
   ding: {fileID: 8300000, guid: cdb097b6544b74544ac305359f8a1704, type: 3}

@@ -31,6 +31,7 @@ namespace Infrastructure
             towerCollision.Init(towerPattern.matrix);
             towerCollision.OnGateCollided += () => _audioService.PlayBump();
             towerCollision.OnGatePassed += () => _audioService.PlayDing();
+            towerCollision.OnFinishPassed += () => _audioService.PlayFinish();
             
             List<int[,]> gatePatterns = Enumerable.Range(0, levelData.numOfGates).Select(_ => towerPattern.towerProjections[RandomDirection()]).ToList();
 

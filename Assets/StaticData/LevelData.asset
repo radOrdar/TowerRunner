@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerLevels: 10
   numLedge: 4
-  numOfGates: 10
+  numOfGates: 5
   distanceBtwGates: 100

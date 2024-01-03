@@ -5,6 +5,7 @@ public class CameraAnimations : MonoBehaviour
 {
     [SerializeField] private float normalFov;
     [SerializeField] private float accelFov;
+    [SerializeField] private float finishFov;
     [SerializeField] private float fovSpeed;
     [SerializeField] private float rotationSpeed;
 
@@ -16,7 +17,11 @@ public class CameraAnimations : MonoBehaviour
     {
         _mainCamera = Camera.main;
         FindAnyObjectByType<TowerMove>().OnHasteSwitch += SetHaste;
-        FindAnyObjectByType<TowerCollision>().OnFinishPassed += () => _rotating = true;
+        FindAnyObjectByType<TowerCollision>().OnFinishPassed += () =>
+        {
+            _rotating = true;
+            _targetFov = finishFov;
+        };
     }
 
     private void SetHaste(bool isEnabled) =>
