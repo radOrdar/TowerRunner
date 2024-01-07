@@ -1,5 +1,4 @@
-﻿using Tower;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace StaticData
 {

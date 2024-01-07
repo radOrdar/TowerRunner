@@ -2423,7 +2423,7 @@ GameObject:
   - component: {fileID: 1352450191}
   - component: {fileID: 1352450190}
   m_Layer: 0
-  m_Name: LevelInitializer
+  m_Name: LevelController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2442,7 +2442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelData: {fileID: 11400000, guid: e4e1b23c548290749876e8fe4f285f9d, type: 2}
-  finishLinePf: {fileID: 2640195575909246685, guid: f8039d79320054b419de1f08f8708a5d,
+  finishPf: {fileID: 2640195575909246685, guid: f8039d79320054b419de1f08f8708a5d,
     type: 3}
 --- !u!4 &1352450191
 Transform:

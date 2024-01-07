@@ -1,6 +1,6 @@
-using System;
 using Services;
 using Services.Audio;
+using Services.Event;
 using Services.Generator;
 using Services.Input;
 using StaticData;
@@ -24,6 +24,7 @@ namespace Infrastructure
       {
          AllServices.Instance.Register<ITowerGeneratorService>(new TowerGeneratorService());
          AllServices.Instance.Register<IInputService>(new OldInputService());
+         AllServices.Instance.Register<EventService>(new EventService());
          
          var audioService = new GameObject("AudioService").AddComponent<AudioService>();
          audioService.Init(soundsData);

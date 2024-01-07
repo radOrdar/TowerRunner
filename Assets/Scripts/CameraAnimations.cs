@@ -1,4 +1,5 @@
-﻿using Tower.Components;
+﻿using Services;
+using Services.Event;
 using UnityEngine;
 
 public class CameraAnimations : MonoBehaviour
@@ -9,23 +10,23 @@ public class CameraAnimations : MonoBehaviour
     [SerializeField] private float fovSpeed;
     [SerializeField] private float rotationSpeed;
 
-    private float _targetFov;
+    private EventService _eventService;
     private Camera _mainCamera;
+    
+    private float _targetFov;
     private bool _rotating;
 
     private void Start()
     {
         _mainCamera = Camera.main;
-        FindAnyObjectByType<TowerMove>().OnHasteSwitch += SetHaste;
-        FindAnyObjectByType<TowerCollision>().OnFinishPassed += () =>
+        _eventService = AllServices.Instance.Get<EventService>();
+        _eventService.HasteSwitch += enable => _targetFov = enable ? accelFov : normalFov;;
+        _eventService.FinishPassed += () =>
         {
             _rotating = true;
             _targetFov = finishFov;
         };
     }
-
-    private void SetHaste(bool isEnabled) =>
-        _targetFov = isEnabled ? accelFov : normalFov;
 
     private void Update()
     {

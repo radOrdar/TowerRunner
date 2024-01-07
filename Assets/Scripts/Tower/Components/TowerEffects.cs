@@ -1,3 +1,5 @@
+using Services;
+using Services.Event;
 using UnityEngine;
 
 namespace Tower.Components
@@ -8,12 +10,15 @@ namespace Tower.Components
         [SerializeField] private ParticleSystem towerSpeedFx;
         [SerializeField] private ParticleSystem fireWorkPf;
 
+        private EventService _eventService;
+        
         private void Start()
         {
-            GetComponent<TowerMove>().OnHasteSwitch += SetEnabledSpeedFx;
-            GetComponentInChildren<TowerCollision>().OnFinishPassed += () => SetEnabledSpeedFx(false);
-            GetComponentInChildren<TowerCollision>().OnFinishPassed += async () =>
+            _eventService = AllServices.Instance.Get<EventService>();
+            _eventService.HasteSwitch += SetEnabledSpeedFx;
+            _eventService.FinishPassed += async () =>
             {
+                SetEnabledSpeedFx(false);
                 await Awaitable.WaitForSecondsAsync(0.2f);
                 var firework = Instantiate(fireWorkPf, transform);
                 firework.transform.localPosition = Vector3.up * 10;

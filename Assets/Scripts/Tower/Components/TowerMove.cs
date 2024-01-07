@@ -1,8 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Obstacle;
 using Services;
+using Services.Event;
 using Services.Input;
 using UnityEngine;
 using Utils;
@@ -23,12 +23,13 @@ namespace Tower.Components
         [SerializeField] private float manualRotationSpeed = 3;
         [SerializeField] private float autoRotateSpeed = 90;
 
+        private IInputService _inputService;
+        private EventService _eventService;
+        private AllGates _allGates;
+
         private Vector3[] _directions = { Vector3.forward, Vector3.left, Vector3.right, Vector3.back, };
         private Dictionary<Vector3, int[,]> _towerProjections;
-
-        private AllGates allGates;
-        private IInputService _inputService;
-
+        
         private Vector3 _prevMousePos;
         private Quaternion _targetRotation;
         private float _targetSpeed;
@@ -36,8 +37,6 @@ namespace Tower.Components
         private float _currentAcceleration;
         private bool _slowedDown;
         private bool _stopped;
-
-        public event Action<bool> OnHasteSwitch;
 
         public void Init(Dictionary<Vector3, int[,]> towerProjections)
         {
@@ -47,9 +46,11 @@ namespace Tower.Components
         private void Start()
         {
             _inputService = AllServices.Instance.Get<IInputService>();
-            allGates = FindAnyObjectByType<AllGates>();
-            GetComponentInChildren<TowerCollision>().OnGateCollided += BounceBack;
-            GetComponentInChildren<TowerCollision>().OnFinishPassed += Stop;
+            _eventService = AllServices.Instance.Get<EventService>();
+            _allGates = FindAnyObjectByType<AllGates>();
+            
+            _eventService.GateCollided += BounceBack;
+            _eventService.FinishPassed += Stop;
             
             _targetSpeed = moveSpeed;
             _currentAcceleration = acceleration;
@@ -108,15 +109,15 @@ namespace Tower.Components
                 {
                     
                     if (_towerProjections.TryGetValue(bodyTransform.forward, out int[,] proj) &&
-                        allGates.TryGetNextGatePattern(out int[,] gatePattern) &&
+                        _allGates.TryGetNextGatePattern(out int[,] gatePattern) &&
                         EqualityCheck(proj, gatePattern))
                     {
                         _targetSpeed = hasteMoveSpeed;
-                        OnHasteSwitch?.Invoke(true);
+                        _eventService.OnHasteSwitch(true);
                     } else
                     {
                         _targetSpeed = moveSpeed;
-                        OnHasteSwitch?.Invoke(false);
+                        _eventService.OnHasteSwitch(false);
                     }
                 }
 
@@ -155,7 +156,7 @@ namespace Tower.Components
         {
             _currentAcceleration = bounceAcceleration;
             _slowedDown = true;
-            OnHasteSwitch?.Invoke(false);
+            _eventService.OnHasteSwitch(false);
             yield return WaitForSecondsPool.Get(bounceAccelerationDelay);
             _currentAcceleration = acceleration;
             _slowedDown = false;
