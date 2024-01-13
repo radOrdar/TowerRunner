@@ -1,5 +1,6 @@
+using Core;
+using Infrastructure;
 using Services;
-using Services.Event;
 using UnityEngine;
 
 namespace Tower.Components
@@ -10,13 +11,13 @@ namespace Tower.Components
         [SerializeField] private ParticleSystem towerSpeedFx;
         [SerializeField] private ParticleSystem fireWorkPf;
 
-        private EventService _eventService;
+        private EventsProvider eventsProvider;
         
         private void Start()
         {
-            _eventService = AllServices.Instance.Get<EventService>();
-            _eventService.HasteSwitch += SetEnabledSpeedFx;
-            _eventService.FinishPassed += async () =>
+            eventsProvider = ProjectContext.I.EventsProvider;
+            eventsProvider.HasteSwitch += SetEnabledSpeedFx;
+            eventsProvider.FinishPassed += async () =>
             {
                 SetEnabledSpeedFx(false);
                 await Awaitable.WaitForSecondsAsync(0.2f);

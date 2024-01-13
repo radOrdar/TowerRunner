@@ -1,5 +1,6 @@
-﻿using Services;
-using Services.Event;
+﻿using Core;
+using Infrastructure;
+using Services;
 using UnityEngine;
 
 public class CameraAnimations : MonoBehaviour
@@ -10,7 +11,7 @@ public class CameraAnimations : MonoBehaviour
     [SerializeField] private float fovSpeed;
     [SerializeField] private float rotationSpeed;
 
-    private EventService _eventService;
+    private EventsProvider eventsProvider;
     private Camera _mainCamera;
     
     private float _targetFov;
@@ -19,9 +20,9 @@ public class CameraAnimations : MonoBehaviour
     private void Start()
     {
         _mainCamera = Camera.main;
-        _eventService = AllServices.Instance.Get<EventService>();
-        _eventService.HasteSwitch += enable => _targetFov = enable ? accelFov : normalFov;;
-        _eventService.FinishPassed += () =>
+        eventsProvider = ProjectContext.I.EventsProvider;
+        eventsProvider.HasteSwitch += enable => _targetFov = enable ? accelFov : normalFov;;
+        eventsProvider.FinishPassed += () =>
         {
             _rotating = true;
             _targetFov = finishFov;

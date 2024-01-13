@@ -1,6 +1,7 @@
 ﻿using System.Collections;
+using Core;
+using Infrastructure;
 using Services;
-using Services.Event;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -16,7 +17,7 @@ namespace Tower.Components
         [SerializeField] private StreakFx streakFx;
         [SerializeField] private TextMeshProUGUI scoreText;
 
-        private EventService _eventService;
+        private EventsProvider eventsProvider;
         
         private IObjectPool<ScoreGainFx> _poolScoreGainFx;
 
@@ -40,7 +41,7 @@ namespace Tower.Components
 
         private void Start()
         {
-            _eventService = AllServices.Instance.Get<EventService>();
+            eventsProvider = ProjectContext.I.EventsProvider;
             
             _poolScoreGainFx = new ObjectPool<ScoreGainFx>(
                 createFunc: () =>
@@ -56,16 +57,16 @@ namespace Tower.Components
                 actionOnRelease: g => g.gameObject.SetActive(false)
             );
             
-            _eventService.GatePassed += StreakIncrease;
-            _eventService.GateCollided += ResetStreak;
-            _eventService.FinishPassed += () =>
+            eventsProvider.GatePassed += StreakIncrease;
+            eventsProvider.GateCollided += ResetStreak;
+            eventsProvider.FinishPassed += () =>
             {
                 _gaining = false;
                 _score += 300;
                 scoreText.SetText(_score.ToString());
                 _poolScoreGainFx.Get().SetValue(300);
             };
-            _eventService.HasteSwitch += enable => _gaining = enable;
+            eventsProvider.HasteSwitch += enable => _gaining = enable;
             Streak = 1;
             StartCoroutine(ScoreTick());
         }

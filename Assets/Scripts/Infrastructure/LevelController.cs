@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
+using Core.Audio;
 using Obstacle;
-using Services;
-using Services.Audio;
-using Services.Event;
-using Services.Generator;
 using StaticData;
 using Tower.Components;
 using Tower.Data;
@@ -19,24 +17,24 @@ namespace Infrastructure
         [SerializeField] private LevelData levelData;
         [SerializeField] private Finish finishPf;
 
-        private IAudioService _audioService;
-        private EventService _eventService;
-        
+        private AudioProvider _audioProvider;
+        private EventsProvider _eventsProvider;
+
         private void Awake()
         {
-            _audioService = AllServices.Instance.Get<IAudioService>();
-            _eventService = AllServices.Instance.Get<EventService>();
-            _audioService.PlayMusic();
-            
-            TowerPattern towerPattern = AllServices.Instance.Get<ITowerGeneratorService>().GeneratePattern(levelData.towerLevels, levelData.numLedge);
+            _audioProvider = ProjectContext.I.AudioProvider;
+            _eventsProvider = ProjectContext.I.EventsProvider;
+            _audioProvider.PlayMusic();
+
+            TowerPattern towerPattern = new TowerGenerator().GeneratePattern(levelData.towerLevels, levelData.numLedge);
             FindAnyObjectByType<TowerMove>().Init(towerPattern.towerProjections);
             FindAnyObjectByType<TowerBody>().Init(towerPattern.matrix);
             TowerCollision towerCollision = FindAnyObjectByType<TowerCollision>();
             towerCollision.Init(towerPattern.matrix);
-            _eventService.GateCollided += () => _audioService.PlayBump();
-            _eventService.GatePassed += () => _audioService.PlayDing();
-            _eventService.FinishPassed += () => _audioService.PlayFinish();
-            
+            _eventsProvider.GateCollided += () => _audioProvider.PlayBump();
+            _eventsProvider.GatePassed += () => _audioProvider.PlayDing();
+            _eventsProvider.FinishPassed += () => _audioProvider.PlayFinish();
+
             List<int[,]> gatePatterns = Enumerable.Range(0, levelData.numOfGates).Select(_ => towerPattern.towerProjections[RandomDirection()]).ToList();
 
             Instantiate(finishPf, new Vector3(0, 0.1f, levelData.numOfGates * levelData.distanceBtwGates + 40), Quaternion.identity);

@@ -1,17 +1,16 @@
 ﻿using StaticData;
 using UnityEngine;
 
-namespace Services.Audio
+namespace Core.Audio
 {
     [RequireComponent(typeof(AudioSource))]
-    public class AudioService : MonoBehaviour, IAudioService
+    public class AudioProvider : MonoBehaviour
     {
-        private SoundsData _soundsData;
+        [SerializeField] private SoundsData _soundsData;
         private AudioSource _audioSource;
         
-        public void Init(SoundsData soundsData)
+        private void Awake()
         {
-            _soundsData = soundsData;
             _audioSource = GetComponent<AudioSource>();
             _audioSource.loop = true;
         }

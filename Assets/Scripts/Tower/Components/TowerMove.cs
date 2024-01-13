@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Core;
+using Infrastructure;
 using Obstacle;
 using Services;
-using Services.Event;
-using Services.Input;
 using UnityEngine;
 using Utils;
 
@@ -23,8 +23,8 @@ namespace Tower.Components
         [SerializeField] private float manualRotationSpeed = 3;
         [SerializeField] private float autoRotateSpeed = 90;
 
-        private IInputService _inputService;
-        private EventService _eventService;
+        private InputProvider _inputProvider;
+        private EventsProvider eventsProvider;
         private AllGates _allGates;
 
         private Vector3[] _directions = { Vector3.forward, Vector3.left, Vector3.right, Vector3.back, };
@@ -45,12 +45,12 @@ namespace Tower.Components
         
         private void Start()
         {
-            _inputService = AllServices.Instance.Get<IInputService>();
-            _eventService = AllServices.Instance.Get<EventService>();
+            _inputProvider = ProjectContext.I.InputProvider;
+            eventsProvider = ProjectContext.I.EventsProvider;
             _allGates = FindAnyObjectByType<AllGates>();
             
-            _eventService.GateCollided += BounceBack;
-            _eventService.FinishPassed += Stop;
+            eventsProvider.GateCollided += BounceBack;
+            eventsProvider.FinishPassed += Stop;
             
             _targetSpeed = moveSpeed;
             _currentAcceleration = acceleration;
@@ -65,14 +65,14 @@ namespace Tower.Components
             if(_stopped)
                 return;
             
-            if (_inputService.GetMouseButtonDown(0))
+            if (_inputProvider.GetMouseButtonDown(0))
             {
-                _prevMousePos = _inputService.MousePosition;
+                _prevMousePos = _inputProvider.MousePosition;
             }
 
-            if (_inputService.GetMouseButton(0))
+            if (_inputProvider.GetMouseButton(0))
             {
-                Vector3 mousePosition = _inputService.MousePosition;
+                Vector3 mousePosition = _inputProvider.MousePosition;
                 bodyTransform.Rotate(Vector3.up, (mousePosition - _prevMousePos).x * manualRotationSpeed, Space.World);
                 _prevMousePos = mousePosition;
             } else
@@ -80,7 +80,7 @@ namespace Tower.Components
                 bodyTransform.rotation = Quaternion.RotateTowards(bodyTransform.rotation, _targetRotation, autoRotateSpeed * Time.deltaTime);
             }
 
-            if (_inputService.GetMouseButtonUp(0))
+            if (_inputProvider.GetMouseButtonUp(0))
             {
                 Vector3 currentDir = bodyTransform.forward;
                 Vector3 max = _directions[0];
@@ -113,11 +113,11 @@ namespace Tower.Components
                         EqualityCheck(proj, gatePattern))
                     {
                         _targetSpeed = hasteMoveSpeed;
-                        _eventService.OnHasteSwitch(true);
+                        eventsProvider.OnHasteSwitch(true);
                     } else
                     {
                         _targetSpeed = moveSpeed;
-                        _eventService.OnHasteSwitch(false);
+                        eventsProvider.OnHasteSwitch(false);
                     }
                 }
 
@@ -156,7 +156,7 @@ namespace Tower.Components
         {
             _currentAcceleration = bounceAcceleration;
             _slowedDown = true;
-            _eventService.OnHasteSwitch(false);
+            eventsProvider.OnHasteSwitch(false);
             yield return WaitForSecondsPool.Get(bounceAccelerationDelay);
             _currentAcceleration = acceleration;
             _slowedDown = false;

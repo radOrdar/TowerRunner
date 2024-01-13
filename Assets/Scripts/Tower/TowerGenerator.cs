@@ -5,9 +5,9 @@ using Tower.Data;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Services.Generator
+namespace Core
 {
-    public class TowerGeneratorService : ITowerGeneratorService
+    public class TowerGenerator
     {
         public TowerPattern GeneratePattern(int towerLevels, int numLedge)
         {
