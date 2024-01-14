@@ -1,13 +1,16 @@
-﻿public static class Constants
+﻿namespace Core
 {
-    public static class AssetPaths
+    public static class Constants
     {
-        public const string LOADING_SCREEN = "LoadingScreen";
-    }
+        public static class Assets
+        {
+            public const string LOADING_SCREEN = "LoadingScreen";
+        }
 
-    public static class Scenes
-    {
-        public const string MAIN_MENU = "MainMenu";
-        public const string STARTUP = "Startup";
+        public static class Scenes
+        {
+            public const string MAIN_MENU = "MainMenu";
+            public const string STARTUP = "Startup";
+        }
     }
 }

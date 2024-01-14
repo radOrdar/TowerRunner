@@ -1,5 +1,5 @@
 ﻿using System;
-using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 namespace Core.Loading
 {
@@ -7,6 +7,6 @@ namespace Core.Loading
     {
         string Description { get; }
         
-        Awaitable Load(Action<float> onProgress);
+        UniTask Load(Action<float> onProgress);
     }
 }

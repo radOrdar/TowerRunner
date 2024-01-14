@@ -6,7 +6,7 @@ namespace Infrastructure
    {
       [SerializeField] private AppStartup appStartup;
 
-      private void Awake()
+      private void Start()
       {
          if (FindAnyObjectByType<AppStartup>() == null)
          {

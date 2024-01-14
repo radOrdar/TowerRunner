@@ -1,30 +1,27 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Infrastructure;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Core.Loading
 {
     public class LoadingScreenProvider
     {
-        public async Awaitable Load(ILoadingOperation loadingOperation)
+        public async UniTask LoadAndDestroy(ILoadingOperation loadingOperation)
         {
             var operations = new Queue<ILoadingOperation>();
             operations.Enqueue(loadingOperation);
-            await Load(operations);
+            await LoadAndDestroy(operations);
         }
 
-        public async Awaitable Load(Queue<ILoadingOperation> loadingOperations)
+        public async UniTask LoadAndDestroy(Queue<ILoadingOperation> loadingOperations)
         {
-            ResourceRequest resourceRequest = ProjectContext.I.AssetProvider.Load<LoadingScreen>(Constants.AssetPaths.LOADING_SCREEN);
-            
-            while (!resourceRequest.isDone)
-            {
-                await Awaitable.NextFrameAsync();
-            }
-            LoadingScreen loadingScreen = (LoadingScreen)resourceRequest.asset;
-            SceneManager.MoveGameObjectToScene(loadingScreen.gameObject, SceneManager.GetSceneByName(Constants.Scenes.STARTUP));
-            // await loadingScreen.Load(loadingOperations);
+            AssetProvider assetProvider = ProjectContext.I.AssetProvider;
+            LoadingScreen loadingScreen = await assetProvider.InstantiateAsync<LoadingScreen>(Constants.Assets.LOADING_SCREEN);
+
+            Debug.Log("Done");
+            await loadingScreen.Load(loadingOperations);
+            assetProvider.Unload(loadingScreen.gameObject);
         }
     }
 }

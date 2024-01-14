@@ -1,25 +1,45 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core.Loading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Object = UnityEngine.Object;
+using UnityEngine.AddressableAssets;
 
 namespace Core
 {
     public class AssetProvider : ILoadingOperation
     {
         private bool _isReady;
-        
-        public ResourceRequest Load<T>(string assetPath) where T : Object
+
+        private HashSet<GameObject> _cachedObjects = new ();
+        public async UniTask<T> InstantiateAsync<T>(string assetId, Transform parent = null)
         {
-            return Resources.LoadAsync<T>(assetPath);
+            GameObject asset = await Addressables.InstantiateAsync(assetId, parent);
+            
+            _cachedObjects.Add(asset);
+            
+            if (asset.TryGetComponent(out T component) == false)
+            {
+                throw new NullReferenceException($"Object of type {typeof(T)} is null on " +
+                                                 "attempt to load it from addressables");
+            }
+            
+            return component;
+        }
+
+        public void Unload(GameObject asset)
+        {
+            asset.SetActive(false);
+            if(_cachedObjects.Remove(asset))   
+                Addressables.ReleaseInstance(asset);
         }
 
         public string Description => "Assets Initialization...";
-        public async Awaitable Load(Action<float> onProgress)
+        public async UniTask Load(Action<float> onProgress)
         {
-            //Initialize addressables?
             onProgress(0.15f);
-            await Awaitable.WaitForSecondsAsync(1f);
+            await Addressables.InitializeAsync();
+            await UniTask.Delay(500);
             _isReady = true;
         }
     }
