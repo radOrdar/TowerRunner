@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Infrastructure;
-using UnityEngine;
 
 namespace Core.Loading
 {
@@ -18,8 +17,7 @@ namespace Core.Loading
         {
             AssetProvider assetProvider = ProjectContext.I.AssetProvider;
             LoadingScreen loadingScreen = await assetProvider.InstantiateAsync<LoadingScreen>(Constants.Assets.LOADING_SCREEN);
-
-            Debug.Log("Done");
+            
             await loadingScreen.Load(loadingOperations);
             assetProvider.Unload(loadingScreen.gameObject);
         }

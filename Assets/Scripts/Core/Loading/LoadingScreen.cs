@@ -30,7 +30,6 @@ namespace Core.Loading
                 _targetProgress = 1f;
                 await WaitForBarFill();
             }
-
             _canvas.enabled = false;
         }
 

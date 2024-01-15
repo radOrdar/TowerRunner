@@ -11,6 +11,7 @@
         {
             public const string MAIN_MENU = "MainMenu";
             public const string STARTUP = "Startup";
+            public const string GAME = "Game";
         }
     }
 }

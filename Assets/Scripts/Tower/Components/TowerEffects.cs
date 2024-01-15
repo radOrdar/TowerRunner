@@ -1,6 +1,6 @@
 using Core;
+using Cysharp.Threading.Tasks;
 using Infrastructure;
-using Services;
 using UnityEngine;
 
 namespace Tower.Components
@@ -20,7 +20,7 @@ namespace Tower.Components
             eventsProvider.FinishPassed += async () =>
             {
                 SetEnabledSpeedFx(false);
-                await Awaitable.WaitForSecondsAsync(0.2f);
+                await UniTask.Delay(200);
                 var firework = Instantiate(fireWorkPf, transform);
                 firework.transform.localPosition = Vector3.up * 10;
             };

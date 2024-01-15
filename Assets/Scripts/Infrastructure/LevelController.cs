@@ -5,6 +5,7 @@ using Core;
 using Core.Audio;
 using Obstacle;
 using StaticData;
+using TMPro;
 using Tower.Components;
 using Tower.Data;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace Infrastructure
     {
         [SerializeField] private LevelData levelData;
         [SerializeField] private Finish finishPf;
+        [SerializeField] private TextMeshProUGUI scoreText;
 
         private AudioProvider _audioProvider;
         private EventsProvider _eventsProvider;
@@ -25,6 +27,8 @@ namespace Infrastructure
             _audioProvider = ProjectContext.I.AudioProvider;
             _eventsProvider = ProjectContext.I.EventsProvider;
             _audioProvider.PlayMusic();
+            
+            scoreText.SetText($"Level {ProjectContext.I.UserContainer.Level + 1}");
 
             TowerPattern towerPattern = new TowerGenerator().GeneratePattern(levelData.towerLevels, levelData.numLedge);
             FindAnyObjectByType<TowerMove>().Init(towerPattern.towerProjections);
