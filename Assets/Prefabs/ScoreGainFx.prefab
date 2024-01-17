@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3630907858174746730}
   - component: {fileID: 6310944287947594894}
   - component: {fileID: 790569100355211167}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ScoreGainFx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 5176540900143256983}
   - component: {fileID: 6917323375001063815}
   - component: {fileID: 3635204794310672692}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

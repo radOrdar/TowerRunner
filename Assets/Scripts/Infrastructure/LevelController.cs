@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Core;
 using Core.Audio;
+using Core.Loading;
+using Cysharp.Threading.Tasks;
 using Obstacle;
 using StaticData;
 using TMPro;
 using Tower.Components;
 using Tower.Data;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Infrastructure
@@ -17,7 +21,8 @@ namespace Infrastructure
     {
         [SerializeField] private LevelData levelData;
         [SerializeField] private Finish finishPf;
-        [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private TextMeshProUGUI levelText;
+        [SerializeField] private Button nextLevelBtn;
 
         private AudioProvider _audioProvider;
         private EventsProvider _eventsProvider;
@@ -28,7 +33,8 @@ namespace Infrastructure
             _eventsProvider = ProjectContext.I.EventsProvider;
             _audioProvider.PlayMusic();
             
-            scoreText.SetText($"Level {ProjectContext.I.UserContainer.Level + 1}");
+            levelText.SetText($"Level {ProjectContext.I.UserContainer.Level + 1}");
+            nextLevelBtn.onClick.AddListener(NextLevel);
 
             TowerPattern towerPattern = new TowerGenerator().GeneratePattern(levelData.towerLevels, levelData.numLedge);
             FindAnyObjectByType<TowerMove>().Init(towerPattern.towerProjections);
@@ -37,12 +43,26 @@ namespace Infrastructure
             towerCollision.Init(towerPattern.matrix);
             _eventsProvider.GateCollided += () => _audioProvider.PlayBump();
             _eventsProvider.GatePassed += () => _audioProvider.PlayDing();
-            _eventsProvider.FinishPassed += () => _audioProvider.PlayFinish();
+            _eventsProvider.FinishPassed += () => OnFinishPassed();
 
             List<int[,]> gatePatterns = Enumerable.Range(0, levelData.numOfGates).Select(_ => towerPattern.towerProjections[RandomDirection()]).ToList();
 
             Instantiate(finishPf, new Vector3(0, 0.1f, levelData.numOfGates * levelData.distanceBtwGates + 40), Quaternion.identity);
             FindAnyObjectByType<AllGates>().Init(gatePatterns, levelData.distanceBtwGates);
+        }
+
+        private void NextLevel()
+        {
+            ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new GameLoadingOperation());
+        }
+
+        private async Task OnFinishPassed()
+        {
+            _audioProvider.PlayFinish();
+            ProjectContext.I.UserContainer.Level++;
+            ProjectContext.I.SaveSystemProvider.SaveProgress();
+            await UniTask.Delay(2000);
+            nextLevelBtn.gameObject.SetActive(true);
         }
 
         private Vector3 RandomDirection()

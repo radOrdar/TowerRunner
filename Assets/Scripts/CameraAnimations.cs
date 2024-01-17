@@ -1,6 +1,5 @@
 ﻿using Core;
 using Infrastructure;
-using Services;
 using UnityEngine;
 
 public class CameraAnimations : MonoBehaviour

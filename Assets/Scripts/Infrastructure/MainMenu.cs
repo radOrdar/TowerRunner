@@ -18,7 +18,9 @@ public class MainMenu : MonoBehaviour
 
    private void OnContinueBtnClicked()
    {
-      
+      DisableButtons();
+
+      ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new GameLoadingOperation());
    }
 
    private void OnNewGameBtnClicked()

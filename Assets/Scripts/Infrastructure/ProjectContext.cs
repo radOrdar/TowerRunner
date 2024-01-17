@@ -14,6 +14,7 @@ namespace Infrastructure
         public AudioProvider AudioProvider { get; private set; }
         public EventsProvider EventsProvider { get; private set; }
         public InputProvider InputProvider { get; private set; }
+        public SaveSystemProvider SaveSystemProvider { get; private set; }
         
         public static ProjectContext I { get; private set; }
 
@@ -32,6 +33,7 @@ namespace Infrastructure
             UICamera = GetComponentInChildren<Camera>();
             EventsProvider = new EventsProvider();
             InputProvider = new InputProvider();
+            SaveSystemProvider = new SaveSystemProvider();
         }
     }
 }
