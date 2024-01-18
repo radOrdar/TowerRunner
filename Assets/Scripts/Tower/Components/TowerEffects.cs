@@ -17,13 +17,13 @@ namespace Tower.Components
         {
             eventsProvider = ProjectContext.I.EventsProvider;
             eventsProvider.HasteSwitch += SetEnabledSpeedFx;
-            eventsProvider.FinishPassed += async () =>
-            {
-                SetEnabledSpeedFx(false);
-                await UniTask.Delay(200);
-                var firework = Instantiate(fireWorkPf, transform);
-                firework.transform.localPosition = Vector3.up * 10;
-            };
+            eventsProvider.FinishPassed += OnFinishPassed;
+        }
+
+        private void OnDestroy()
+        {
+            eventsProvider.HasteSwitch -= SetEnabledSpeedFx;
+            eventsProvider.FinishPassed -= OnFinishPassed;
         }
 
         public void SetEnabledSpeedFx(bool enable)
@@ -35,6 +35,14 @@ namespace Tower.Components
             {
                 towerSpeedFx.Stop();
             }
+        }
+
+        private async void OnFinishPassed()
+        {
+            SetEnabledSpeedFx(false);
+            await UniTask.Delay(200);
+            var firework = Instantiate(fireWorkPf, transform);
+            firework.transform.localPosition = Vector3.up * 10;
         }
     }
 }

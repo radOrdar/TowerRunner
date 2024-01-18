@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Core;
 using Infrastructure;
 using Obstacle;
-using Services;
 using UnityEngine;
 using Utils;
 
@@ -55,6 +54,12 @@ namespace Tower.Components
             _targetSpeed = moveSpeed;
             _currentAcceleration = acceleration;
             StartCoroutine(CheckGateForm());
+        }
+
+        private void OnDestroy()
+        {
+            eventsProvider.GateCollided -= BounceBack;
+            eventsProvider.FinishPassed -= Stop;
         }
 
         void Update()

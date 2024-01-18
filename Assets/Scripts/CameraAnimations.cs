@@ -20,12 +20,14 @@ public class CameraAnimations : MonoBehaviour
     {
         _mainCamera = Camera.main;
         eventsProvider = ProjectContext.I.EventsProvider;
-        eventsProvider.HasteSwitch += enable => _targetFov = enable ? accelFov : normalFov;;
-        eventsProvider.FinishPassed += () =>
-        {
-            _rotating = true;
-            _targetFov = finishFov;
-        };
+        eventsProvider.HasteSwitch += OnHasteSwitch;
+        eventsProvider.FinishPassed += OnFinishPassed;
+    }
+
+    private void OnDestroy()
+    {
+        eventsProvider.HasteSwitch -= OnHasteSwitch;
+        eventsProvider.FinishPassed -= OnFinishPassed;
     }
 
     private void Update()
@@ -36,5 +38,16 @@ public class CameraAnimations : MonoBehaviour
         {
             transform.RotateAround(transform.parent.position, Vector3.up, rotationSpeed * Time.deltaTime);
         }
+    }
+    
+    private void OnHasteSwitch(bool enable)
+    {
+        _targetFov = enable ? accelFov : normalFov;
+    }
+
+    private void OnFinishPassed()
+    {
+        _rotating = true;
+        _targetFov = finishFov;
     }
 }

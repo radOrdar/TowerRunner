@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using Core;
 using Infrastructure;
-using Services;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -59,16 +58,31 @@ namespace Tower.Components
             
             eventsProvider.GatePassed += StreakIncrease;
             eventsProvider.GateCollided += ResetStreak;
-            eventsProvider.FinishPassed += () =>
-            {
-                _gaining = false;
-                _score += 300;
-                scoreText.SetText(_score.ToString());
-                _poolScoreGainFx.Get().SetValue(300);
-            };
-            eventsProvider.HasteSwitch += enable => _gaining = enable;
+            eventsProvider.FinishPassed += OnFinishPassed;
+            eventsProvider.HasteSwitch += SetActiveGaining;
             Streak = 1;
             StartCoroutine(ScoreTick());
+        }
+
+        private void OnDestroy()
+        {
+            eventsProvider.GatePassed -= StreakIncrease;
+            eventsProvider.GateCollided -= ResetStreak;
+            eventsProvider.FinishPassed -= OnFinishPassed;
+            eventsProvider.HasteSwitch -= SetActiveGaining;
+        }
+
+        private void SetActiveGaining(bool enable)
+        {
+            _gaining = enable;
+        }
+
+        private void OnFinishPassed()
+        {
+            _gaining = false;
+            _score += 300;
+            scoreText.SetText(_score.ToString());
+            _poolScoreGainFx.Get().SetValue(300);
         }
 
         private void ResetStreak()

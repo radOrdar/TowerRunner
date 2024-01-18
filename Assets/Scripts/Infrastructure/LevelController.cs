@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Core;
 using Core.Audio;
-using Core.Loading;
 using Cysharp.Threading.Tasks;
 using Obstacle;
 using StaticData;
@@ -41,9 +39,9 @@ namespace Infrastructure
             FindAnyObjectByType<TowerBody>().Init(towerPattern.matrix);
             TowerCollision towerCollision = FindAnyObjectByType<TowerCollision>();
             towerCollision.Init(towerPattern.matrix);
-            _eventsProvider.GateCollided += () => _audioProvider.PlayBump();
-            _eventsProvider.GatePassed += () => _audioProvider.PlayDing();
-            _eventsProvider.FinishPassed += () => OnFinishPassed();
+            _eventsProvider.GateCollided += OnGateCollided;
+            _eventsProvider.GatePassed += OnGatePassed;
+            _eventsProvider.FinishPassed += OnFinishPassed;
 
             List<int[,]> gatePatterns = Enumerable.Range(0, levelData.numOfGates).Select(_ => towerPattern.towerProjections[RandomDirection()]).ToList();
 
@@ -51,12 +49,29 @@ namespace Infrastructure
             FindAnyObjectByType<AllGates>().Init(gatePatterns, levelData.distanceBtwGates);
         }
 
+        private void OnDestroy()
+        {
+            _eventsProvider.GateCollided -= OnGateCollided;
+            _eventsProvider.GatePassed -= OnGateCollided;
+            _eventsProvider.FinishPassed -= OnFinishPassed;
+        }
+
         private void NextLevel()
         {
             ProjectContext.I.LoadingScreenProvider.LoadAndDestroy(new GameLoadingOperation());
         }
+        
+        private void OnGatePassed()
+        {
+            _audioProvider.PlayDing();
+        }
 
-        private async Task OnFinishPassed()
+        private void OnGateCollided()
+        {
+            _audioProvider.PlayBump();
+        }
+
+        private async void OnFinishPassed()
         {
             _audioProvider.PlayFinish();
             ProjectContext.I.UserContainer.Level++;
