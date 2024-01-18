@@ -9,6 +9,12 @@ namespace Core.Audio
         [SerializeField] private SoundsData _soundsData;
         private AudioSource _audioSource;
         
+        public bool Muted
+        {
+            get => _audioSource.mute;
+            set => _audioSource.mute = value;
+        }
+        
         private void Awake()
         {
             _audioSource = GetComponent<AudioSource>();
